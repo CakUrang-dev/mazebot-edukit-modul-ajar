@@ -1,0 +1,10 @@
+services:
+  mazebot-portal:
+    build: .
+    container_name: mazebot-edukit-portal
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - DOCKER_CONTAINER=1
+    restart: unless-stopped

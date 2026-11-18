@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MazeBot EduKit — Platform Media Pembelajaran Robotika (Neo-Brutalist Edition)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#FAF7F2',
+            stabilo: '#FFDE59',
+            mint: '#7ED957',
+            skybrutal: '#5CE1E6',
+          },
+          fontFamily: {
+            display: ['"Space Grotesk"', '"Plus Jakarta Sans"', 'sans-serif'],
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          boxShadow: {
+            brutal: '4px 4px 0px 0px rgba(0,0,0,1)',
+            'brutal-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+          }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="web/app.css">
+</head>
+<body class="bg-[#FAF7F2] text-black min-h-screen">
+
+  <!-- ======================= TOP NAVBAR & GAMIFICATION BAR ======================= -->
+  <header class="sticky top-0 z-50 bg-[#FAF7F2] border-b-2 border-black px-4 lg:px-8 py-3 no-print">
+    <div class="max-w-[1440px] mx-auto flex flex-wrap items-center justify-between gap-4">
+      
+      <!-- Brand Identity with Framed Lucide Cpu Icon -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 bg-[#FFDE59] border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-display font-extrabold text-xl lg:text-2xl tracking-tight leading-none">MAZEBOT EDUKIT</h1>
+            <span class="font-mono text-[11px] font-bold bg-[#5CE1E6] border-2 border-black px-2 py-0.5 rounded-none">v2.6 STEM</span>
+          </div>
+          <p class="font-mono text-xs text-neutral-700 mt-0.5">Kurikulum Robotika Nasional &bull; SD &bull; SMP &bull; SMA/SMK</p>
+        </div>
+      </div>
+
+      <!-- Navigation Mode Buttons (Lucide Icons Wrapped in 2px Black Border Boxes) -->
+      <nav class="flex flex-wrap items-center gap-2.5">
+        <button onclick="switchMainTab('curriculum')" data-tab="curriculum" class="nav-tab border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all px-3 py-1.5 text-xs lg:text-sm font-extrabold flex items-center gap-2 bg-[#FFDE59]">
+          <span class="w-6 h-6 border-2 border-black rounded-none bg-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          </span>
+          <span>Ruang Belajar</span>
+        </button>
+
+        <button onclick="switchMainTab('simulator')" data-tab="simulator" class="nav-tab border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all px-3 py-1.5 text-xs lg:text-sm font-extrabold flex items-center gap-2 bg-white">
+          <span class="w-6 h-6 border-2 border-black rounded-none bg-[#5CE1E6] flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          </span>
+          <span>Simulator 2D</span>
+        </button>
+
+        <button onclick="switchMainTab('pinout')" data-tab="pinout" class="nav-tab border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all px-3 py-1.5 text-xs lg:text-sm font-extrabold flex items-center gap-2 bg-white">
+          <span class="w-6 h-6 border-2 border-black rounded-none bg-[#FFDE59] flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="4" x2="20" y1="21" y2="21"/><line x1="4" x2="20" y1="14" y2="14"/><line x1="4" x2="20" y1="7" y2="7"/><circle cx="9" cy="14" r="2"/><circle cx="15" cy="7" r="2"/><circle cx="12" cy="21" r="2"/></svg>
+          </span>
+          <span>Tabel Pinout</span>
+        </button>
+
+        <button onclick="switchMainTab('downloads')" data-tab="downloads" class="nav-tab border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all px-3 py-1.5 text-xs lg:text-sm font-extrabold flex items-center gap-2 bg-[#7ED957]">
+          <span class="w-6 h-6 border-2 border-black rounded-none bg-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+          </span>
+          <span>48 PDF Modul</span>
+        </button>
+      </nav>
+
+      <!-- Gamification Sticker Badges (Lucide Flame, Zap, Award) -->
+      <div class="flex flex-wrap items-center gap-2.5">
+        <button onclick="triggerDailyStreak()" title="Klik untuk Check-in Streak Belajar Harian" class="border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all bg-[#FFDE59] px-3 py-1.5 font-mono text-xs font-extrabold flex items-center gap-2 cursor-pointer">
+          <span class="w-6 h-6 border-2 border-black rounded-none bg-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+          </span>
+          <span id="streak-counter">7 HARI STREAK</span>
+        </button>
+
+        <div class="border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-[#5CE1E6] px-3 py-1.5 font-mono text-xs font-extrabold flex items-center gap-2">
+          <span class="w-6 h-6 border-2 border-black rounded-none bg-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+          </span>
+          <span id="xp-counter">0 XP</span>
+        </div>
+
+        <button onclick="openCertificateModal()" class="border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all bg-[#7ED957] px-3 py-1.5 font-mono text-xs font-extrabold flex items-center gap-2 cursor-pointer">
+          <span class="w-6 h-6 border-2 border-black rounded-none bg-white flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+          </span>
+          <span>SERTIFIKAT</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ======================= SEARCH BAR & CATEGORY FILTER BADGES ======================= -->
+  <section class="max-w-[1440px] mx-auto px-4 lg:px-8 pt-6 pb-2 no-print">
+    <div class="bg-white border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-4">
+      <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        
+        <!-- Brutalist Search Box -->
+        <div class="relative flex-1">
+          <div class="flex items-center border-2 border-black rounded-md bg-[#FAF7F2] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden focus-within:bg-white">
+            <span class="w-10 h-10 border-r-2 border-black bg-[#FFDE59] flex items-center justify-center flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </span>
+            <input 
+              id="global-search-input"
+              type="text" 
+              oninput="onSearchModule(this.value)"
+              placeholder="Cari kode modul (M-01..M-16), sensor ultrasonik, TCRT5000, DRV8833, C++, Left-Hand Rule..." 
+              class="w-full py-2 px-3.5 bg-transparent font-medium text-sm focus:outline-none"
+            >
+            <button onclick="clearSearchFilter()" class="bg-[#FFDE59] border-l-2 border-black px-4 py-2.5 font-mono text-xs font-extrabold hover:bg-[#f5d033]">
+              RESET
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Filter Badges (border-2 border-black, sharp/rounded-md) -->
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="setCategoryFilter('ALL')" data-cat="ALL" class="cat-pill border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all px-3 py-1.5 font-mono text-xs font-extrabold flex items-center gap-1.5 bg-[#FFDE59]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            <span>Semua Bab (16)</span>
+          </button>
+
+          <button onclick="setCategoryFilter('NEW')" data-cat="NEW" class="cat-pill border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all px-3 py-1.5 font-mono text-xs font-extrabold flex items-center gap-1.5 bg-[#5CE1E6]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>Materi Baru</span>
+          </button>
+
+          <button onclick="setCategoryFilter('QUIZ')" data-cat="QUIZ" class="cat-pill border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all px-3 py-1.5 font-mono text-xs font-extrabold flex items-center gap-1.5 bg-white">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+            <span>Evaluasi &amp; Ujian</span>
+          </button>
+
+          <button onclick="setCategoryFilter('DONE')" data-cat="DONE" class="cat-pill border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all px-3 py-1.5 font-mono text-xs font-extrabold flex items-center gap-1.5 bg-[#7ED957]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <span>Selesai</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= MAIN WORKSPACE CONTAINER ======================= -->
+  <main class="max-w-[1440px] mx-auto px-4 lg:px-8 py-5">
+
+    <!-- ==================== VIEW 1: COURSE CARDS & LESSON PLAYER ==================== -->
+    <section id="panel-curriculum" class="view-panel active">
+
+      <!-- 1A. KARTU KURSUS (3 COURSE CARDS: SD, SMP, SMA/SMK) -->
+      <div class="mb-7 no-print">
+        <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+          <div class="flex items-center gap-2.5">
+            <span class="w-8 h-8 border-2 border-black rounded-md bg-[#FFDE59] flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+            </span>
+            <h2 class="font-display font-extrabold text-xl lg:text-2xl">Pilih Jalur Kurikulum Robotika MazeBot</h2>
+          </div>
+          <span class="font-mono text-xs font-bold text-neutral-700">Klik kartu kursus untuk memuat 16 Modul ke Ruang Belajar</span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="course-cards-container">
+          <!-- Populated by app.js -->
+        </div>
+      </div>
+
+      <!-- 1B. TAMPILAN RUANG BELAJAR (2-COLUMN COURSE PLAYER: LEFT MAIN LESSON, RIGHT CURRICULUM SIDEBAR) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-7 items-start">
+        
+        <!-- KOLOM KIRI (8/12): PEMUTAR MATERI UTAMA -->
+        <div class="lg:col-span-8 space-y-6" id="lesson-player-left">
+          <!-- Populated by app.js -->
+        </div>
+
+        <!-- KOLOM KANAN (4/12): SIDEBAR KURIKULUM DENGAN CHECKBOX TEBAL -->
+        <aside class="lg:col-span-4 lg:sticky lg:top-24 no-print">
+          <div class="bg-white border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+            
+            <!-- Sidebar Header (#FFDE59 Accent Header) -->
+            <div class="bg-[#FFDE59] border-b-2 border-black p-4">
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-mono text-xs font-extrabold bg-white border-2 border-black px-2 py-0.5 rounded-none" id="sidebar-level-tag">
+                  KURIKULUM SD
+                </span>
+                <span class="font-mono text-xs font-extrabold" id="sidebar-progress-count">0/16 SELESAI</span>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="w-7 h-7 border-2 border-black rounded-md bg-white flex items-center justify-center flex-shrink-0">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                </span>
+                <h3 class="font-display font-extrabold text-lg leading-tight" id="sidebar-course-title">
+                  Daftar Bab &amp; Praktikum
+                </h3>
+              </div>
+              <!-- Chunky Progress Bar inside Sidebar -->
+              <div class="nb-progress-wrap mt-3">
+                <div class="nb-progress-fill" id="sidebar-progress-fill" style="width: 0%;"></div>
+              </div>
+            </div>
+
+            <!-- Legend Status Warna Edukatif (#5CE1E6, #FFDE59, #7ED957) -->
+            <div class="bg-[#FAF7F2] border-b-2 border-black px-4 py-2 flex flex-wrap items-center gap-3 font-mono text-[11px] font-bold">
+              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 inline-block bg-[#5CE1E6] border-2 border-black"></span> Materi Baru</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 inline-block bg-[#FFDE59] border-2 border-black"></span> Evaluasi</span>
+              <span class="inline-flex items-center gap-1.5"><span class="w-3 h-3 inline-block bg-[#7ED957] border-2 border-black"></span> Selesai</span>
+            </div>
+
+            <!-- Chapter List with Retro Thick Checkboxes -->
+            <div class="curriculum-scroll max-h-[680px] overflow-y-auto divide-y-2 divide-black" id="module-list">
+              <!-- Populated by app.js -->
+            </div>
+
+          </div>
+        </aside>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== VIEW 2: VIRTUAL 2D SIMULATOR & PATH ENGINE ==================== -->
+    <section id="panel-simulator" class="view-panel hidden">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-7">
+        
+        <!-- Left 8 cols: 2D Maze Arena & Path Simplifier -->
+        <div class="lg:col-span-8 space-y-6">
+          <div class="bg-white border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+            <div class="bg-[#5CE1E6] border-b-2 border-black p-4 flex flex-wrap items-center justify-between gap-3">
+              <div class="flex items-center gap-3">
+                <span class="w-9 h-9 border-2 border-black rounded-md bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+                </span>
+                <div>
+                  <span class="font-mono text-[11px] font-extrabold uppercase">VIRTUAL ROBOTICS LAB</span>
+                  <h2 class="font-display font-extrabold text-xl leading-none">Simulator 2D MazeBot &amp; Radar Ultrasonik</h2>
+                </div>
+              </div>
+              <span id="sim-status-badge" class="font-mono text-xs font-extrabold bg-[#FFDE59] border-2 border-black px-3 py-1 rounded-none shadow-[2px_2px_0px_0px_#000]">
+                SIAP DI GARIS START
+              </span>
+            </div>
+
+            <div class="p-5">
+              <div class="bg-[#FAF7F2] border-2 border-black rounded-md p-3 shadow-[4px_4px_0px_0px_#000]">
+                <canvas id="maze-canvas" width="560" height="370" class="w-full max-w-[680px] mx-auto block bg-white border-2 border-black rounded-none"></canvas>
+              </div>
+
+              <div class="flex flex-wrap gap-3 justify-center mt-5">
+                <button onclick="setSimMode('ANTI_CRASH')" class="nb-btn bg-[#5CE1E6] px-4 py-2 text-xs font-mono">
+                  <span class="w-6 h-6 border-2 border-black rounded-none bg-white flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  </span>
+                  <span>MODE ANTI-TABRAK (SD M-11)</span>
+                </button>
+                <button onclick="setSimMode('LHR')" class="nb-btn bg-[#7ED957] px-4 py-2 text-xs font-mono">
+                  <span class="w-6 h-6 border-2 border-black rounded-none bg-white flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                  </span>
+                  <span>LEFT-HAND RULE OTONOM (SMP/SMA)</span>
+                </button>
+                <button onclick="resetSim()" class="nb-btn bg-[#FFDE59] px-4 py-2 text-xs font-mono">
+                  <span class="w-6 h-6 border-2 border-black rounded-none bg-white flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                  </span>
+                  <span>RESET POSISI</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dead-End Path Simplification Engine (SMA M-11 & M-12) -->
+          <div class="bg-white border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+            <div class="bg-[#FFDE59] border-b-2 border-black p-4 flex items-center gap-3">
+              <span class="w-8 h-8 border-2 border-black rounded-md bg-white flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              </span>
+              <div>
+                <span class="font-mono text-[11px] font-extrabold">ALGORITMA SMA M-11 &amp; M-12</span>
+                <h3 class="font-display font-extrabold text-lg leading-none">Kalkulator Reduksi Jalan Buntu (Dead-End Elimination)</h3>
+              </div>
+            </div>
+            <div class="p-5">
+              <p class="text-sm text-neutral-800 mb-4">
+                Uji algoritma pemangkasan array karakter (<code>L</code>=Kiri, <code>R</code>=Kanan, <code>S</code>=Lurus, <code>U</code>=Putar Balik) dengan rumus substitusi <code>LUL=S</code>, <code>LUS=R</code>, <code>SUL=R</code>:
+              </p>
+              <div class="flex flex-col sm:flex-row gap-3 mb-4">
+                <input id="calc-raw-input" type="text" value="SLLULUSLRULLS" class="flex-1 px-4 py-2 bg-[#FAF7F2] border-2 border-black rounded-md font-mono text-base font-extrabold shadow-[2px_2px_0px_0px_#000] focus:outline-none">
+                <button onclick="runPathSimplifierUI()" class="nb-btn bg-[#7ED957] px-5 py-2 text-xs font-mono">
+                  <span class="w-6 h-6 border-2 border-black rounded-none bg-white flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                  </span>
+                  <span>PANGKAS ARRAY RUTE</span>
+                </button>
+              </div>
+              <div id="calc-steps-output" class="bg-[#FAF7F2] border-2 border-black rounded-md p-4 font-mono text-xs space-y-2"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right 4 cols: Web D-Pad & Live Radar Bars -->
+        <div class="lg:col-span-4 space-y-6">
+          <div class="bg-white border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+            <div class="bg-[#FFDE59] border-b-2 border-black p-4 flex items-center gap-3">
+              <span class="w-8 h-8 border-2 border-black rounded-md bg-white flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+              </span>
+              <div>
+                <div class="font-mono text-[11px] font-extrabold">WIFI SOFTAP: 192.168.4.1</div>
+                <h3 class="font-display font-extrabold text-lg leading-none">D-Pad Virtual &amp; Telemetri</h3>
+              </div>
+            </div>
+
+            <div class="p-5">
+              <!-- Brutalist D-Pad with SVG Arrows -->
+              <div class="grid grid-cols-3 gap-2.5 w-52 mx-auto my-3">
+                <div></div>
+                <button onmousedown="simDrive(2.0, 0)" onmouseup="simDrive(0, 0)" ontouchstart="simDrive(2.0, 0)" ontouchend="simDrive(0, 0)" class="nb-btn bg-[#5CE1E6] h-14">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
+                </button>
+                <div></div>
+                <button onmousedown="simDrive(0, -0.06)" onmouseup="simDrive(0, 0)" ontouchstart="simDrive(0, -0.06)" ontouchend="simDrive(0, 0)" class="nb-btn bg-[#5CE1E6] h-14">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                </button>
+                <button onclick="simDrive(0, 0)" class="nb-btn bg-[#FFDE59] h-14 font-mono text-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="5" y="5" rx="1"/></svg>
+                </button>
+                <button onmousedown="simDrive(0, 0.06)" onmouseup="simDrive(0, 0)" ontouchstart="simDrive(0, 0.06)" ontouchend="simDrive(0, 0)" class="nb-btn bg-[#5CE1E6] h-14">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                </button>
+                <div></div>
+                <button onmousedown="simDrive(-1.6, 0)" onmouseup="simDrive(0, 0)" ontouchstart="simDrive(-1.6, 0)" ontouchend="simDrive(0, 0)" class="nb-btn bg-[#5CE1E6] h-14">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div></div>
+              </div>
+
+              <!-- Live Ultrasonic Chunky Bars -->
+              <div class="space-y-3 mt-6 pt-4 border-t-2 border-black">
+                <div class="font-mono text-xs font-extrabold uppercase">Radar 3x Sensor Ultrasonik</div>
+                
+                <div>
+                  <div class="flex justify-between font-mono text-xs font-bold mb-1">
+                    <span>KIRI (GPIO 32/35)</span>
+                    <span id="val-left">0.0 cm</span>
+                  </div>
+                  <div class="nb-progress-wrap h-4"><div id="fill-left" class="h-full bg-[#7ED957] border-r-2 border-black transition-all"></div></div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between font-mono text-xs font-bold mb-1">
+                    <span>DEPAN (GPIO 33/34)</span>
+                    <span id="val-front">0.0 cm</span>
+                  </div>
+                  <div class="nb-progress-wrap h-4"><div id="fill-front" class="h-full bg-[#7ED957] border-r-2 border-black transition-all"></div></div>
+                </div>
+
+                <div>
+                  <div class="flex justify-between font-mono text-xs font-bold mb-1">
+                    <span>KANAN (GPIO 18/19)</span>
+                    <span id="val-right">0.0 cm</span>
+                  </div>
+                  <div class="nb-progress-wrap h-4"><div id="fill-right" class="h-full bg-[#7ED957] border-r-2 border-black transition-all"></div></div>
+                </div>
+              </div>
+
+              <!-- TCRT5000 Floor Detector -->
+              <div class="mt-5 p-3.5 bg-[#FAF7F2] border-2 border-black rounded-md shadow-[2px_2px_0px_0px_#000]">
+                <div class="font-mono text-[11px] font-bold text-neutral-700">SENSOR BAWAH TCRT5000 (GPIO 4):</div>
+                <div id="val-tcrt" class="font-mono text-sm font-extrabold mt-1">LANTAI PUTIH (LOW)</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 3: HARDWARE PINOUT REFERENCE ==================== -->
+    <section id="panel-pinout" class="view-panel hidden">
+      <div class="bg-white border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+        <div class="bg-[#FFDE59] border-b-2 border-black p-5 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <span class="w-10 h-10 border-2 border-black rounded-md bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+            </span>
+            <div>
+              <span class="font-mono text-xs font-extrabold uppercase">HARDWARE ARCHITECTURE</span>
+              <h2 class="font-display font-extrabold text-2xl leading-none">Standar Pemetaan Pinout MazeBot EduKit (ESP32)</h2>
+            </div>
+          </div>
+          <span class="font-mono text-xs font-extrabold bg-[#7ED957] border-2 border-black px-3 py-1.5 rounded-none shadow-[2px_2px_0px_0px_#000]">
+            100% KOMPATIBEL ARDUINO IDE
+          </span>
+        </div>
+
+        <div class="p-6">
+          <table class="std-table">
+            <thead>
+              <tr>
+                <th>Modul Perangkat Keras</th>
+                <th>Label Pin Modul</th>
+                <th>GPIO ESP32</th>
+                <th>Mode Sinyal</th>
+                <th>Fungsi Pedagogis dalam Kurikulum</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Driver Motor DRV8833</strong></td>
+                <td><code>IN1</code>, <code>IN2</code></td>
+                <td><code>GPIO 25</code>, <code>GPIO 26</code></td>
+                <td><span class="font-mono text-xs bg-[#5CE1E6] border-2 border-black px-2 py-0.5 font-bold">OUTPUT PWM</span></td>
+                <td>Penggerak Motor DC Gearbox TT Roda Kiri (Maju, Mundur, Kalibrasi Offset)</td>
+              </tr>
+              <tr>
+                <td><strong>Driver Motor DRV8833</strong></td>
+                <td><code>IN3</code>, <code>IN4</code></td>
+                <td><code>GPIO 27</code>, <code>GPIO 14</code></td>
+                <td><span class="font-mono text-xs bg-[#5CE1E6] border-2 border-black px-2 py-0.5 font-bold">OUTPUT PWM</span></td>
+                <td>Penggerak Motor DC Gearbox TT Roda Kanan (Maju, Mundur, Pivot 90&deg;/180&deg;)</td>
+              </tr>
+              <tr>
+                <td><strong>Sensor Ultrasonik KIRI</strong></td>
+                <td><code>TRIG</code> / <code>ECHO</code></td>
+                <td><code>GPIO 32</code> / <code>GPIO 35</code></td>
+                <td><span class="font-mono text-xs bg-[#FFDE59] border-2 border-black px-2 py-0.5 font-bold">OUT / IN</span></td>
+                <td>Menjaga jarak dinding samping (Wall Offset 5–8 cm) &amp; prioritas Left-Hand Rule</td>
+              </tr>
+              <tr>
+                <td><strong>Sensor Ultrasonik DEPAN</strong></td>
+                <td><code>TRIG</code> / <code>ECHO</code></td>
+                <td><code>GPIO 33</code> / <code>GPIO 34</code></td>
+                <td><span class="font-mono text-xs bg-[#FFDE59] border-2 border-black px-2 py-0.5 font-bold">OUT / IN</span></td>
+                <td>Sistem Anti-Tabrak Otomatis (&lt;12 cm) &amp; deteksi batas ujung jalan buntu</td>
+              </tr>
+              <tr>
+                <td><strong>Sensor Ultrasonik KANAN</strong></td>
+                <td><code>TRIG</code> / <code>ECHO</code></td>
+                <td><code>GPIO 18</code> / <code>GPIO 19</code></td>
+                <td><span class="font-mono text-xs bg-[#FFDE59] border-2 border-black px-2 py-0.5 font-bold">OUT / IN</span></td>
+                <td>Deteksi bukaan simpang kanan (T-Junction / Crossroad) &amp; arah putar balik</td>
+              </tr>
+              <tr>
+                <td><strong>Sensor Garis TCRT5000</strong></td>
+                <td><code>DO (Digital)</code></td>
+                <td><code>GPIO 4</code></td>
+                <td><span class="font-mono text-xs bg-[#7ED957] border-2 border-black px-2 py-0.5 font-bold">INPUT DIGITAL</span></td>
+                <td>Murni sebagai Detektor Garis Finish Hitam (Pengunci rem &amp; pemicu reduksi rute)</td>
+              </tr>
+              <tr>
+                <td><strong>LED Indikator Internal</strong></td>
+                <td><code>LED_BUILTIN</code></td>
+                <td><code>GPIO 2</code></td>
+                <td><span class="font-mono text-xs bg-[#5CE1E6] border-2 border-black px-2 py-0.5 font-bold">OUTPUT DIGITAL</span></td>
+                <td>Praktikum program pertama (Blink LED M-03 SD &amp; Diagnostik M-01 SMP)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== VIEW 4: PDF DOWNLOAD CENTER (3 BOOKS + 48 MODULES) ==================== -->
+    <section id="panel-downloads" class="view-panel hidden">
+      <div class="bg-white border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] overflow-hidden">
+        <div class="bg-[#7ED957] border-b-2 border-black p-5 flex items-center gap-3">
+          <span class="w-10 h-10 border-2 border-black rounded-md bg-white flex items-center justify-center shadow-[2px_2px_0px_0px_#000]">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="12" x2="12" y1="18" y2="12"/><polyline points="9 15 12 18 15 15"/></svg>
+          </span>
+          <div>
+            <span class="font-mono text-xs font-extrabold uppercase">PUSAT DOKUMEN RESMI</span>
+            <h2 class="font-display font-extrabold text-2xl leading-none">Unduh Buku Modul Ajar &amp; LKS PDF (SD, SMP, SMA/SMK)</h2>
+          </div>
+        </div>
+
+        <div class="p-6">
+          <!-- 3 Full Book Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="nb-card nb-card-hover bg-white overflow-hidden flex flex-col justify-between">
+              <div class="bg-[#5CE1E6] border-b-2 border-black p-4">
+                <span class="font-mono text-xs font-extrabold bg-white border-2 border-black px-2 py-0.5">TINGKAT SD (KELAS 4–6)</span>
+                <h3 class="font-display font-extrabold text-xl mt-2">Buku Modul Ajar SD Lengkap</h3>
+              </div>
+              <div class="p-4 flex-1 flex flex-col justify-between">
+                <p class="text-xs text-neutral-700">16 Modul Visual Block, Web D-Pad, SOP Baterai 18650 Guru, &amp; LKS.</p>
+                <a href="Modul_Ajar_MazeBot_SD.pdf" target="_blank" class="nb-btn bg-[#FFDE59] px-4 py-2 text-xs font-mono mt-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                  <span>UNDUH BUKU SD (.PDF)</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="nb-card nb-card-hover bg-white overflow-hidden flex flex-col justify-between">
+              <div class="bg-[#FFDE59] border-b-2 border-black p-4">
+                <span class="font-mono text-xs font-extrabold bg-white border-2 border-black px-2 py-0.5">TINGKAT SMP (KELAS 8–9)</span>
+                <h3 class="font-display font-extrabold text-xl mt-2">Buku Modul Ajar SMP Lengkap</h3>
+              </div>
+              <div class="p-4 flex-1 flex flex-col justify-between">
+                <p class="text-xs text-neutral-700">16 Modul Arduino C++, Fisika Bunyi IPA Kelas 8, &amp; Left-Hand Rule.</p>
+                <a href="Modul_Ajar_MazeBot_SMP.pdf" target="_blank" class="nb-btn bg-[#7ED957] px-4 py-2 text-xs font-mono mt-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                  <span>UNDUH BUKU SMP (.PDF)</span>
+                </a>
+              </div>
+            </div>
+
+            <div class="nb-card nb-card-hover bg-white overflow-hidden flex flex-col justify-between">
+              <div class="bg-[#7ED957] border-b-2 border-black p-4">
+                <span class="font-mono text-xs font-extrabold bg-white border-2 border-black px-2 py-0.5">TINGKAT SMA/SMK (KELAS X–XII)</span>
+                <h3 class="font-display font-extrabold text-xl mt-2">Buku Modul Ajar SMA/SMK</h3>
+              </div>
+              <div class="p-4 flex-1 flex flex-col justify-between">
+                <p class="text-xs text-neutral-700">16 Modul Starter API, Closed-Loop Wall, Array &amp; Dead-End Reduction.</p>
+                <a href="Modul_Ajar_MazeBot_SMA_SMK.pdf" target="_blank" class="nb-btn bg-[#5CE1E6] px-4 py-2 text-xs font-mono mt-4">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                  <span>UNDUH BUKU SMA/SMK (.PDF)</span>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- 48 Individual Module PDFs -->
+          <div id="dl-all-modules"></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ======================= GAMIFICATION CERTIFICATE MODAL ======================= -->
+  <div id="cert-modal" class="fixed inset-0 z-50 bg-black/60 hidden items-center justify-center p-4 no-print">
+    <div class="bg-[#FAF7F2] border-2 border-black rounded-md shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] max-w-xl w-full p-6 lg:p-8 relative">
+      <button onclick="closeCertificateModal()" class="nb-btn bg-[#FFDE59] px-3 py-1 text-xs font-mono absolute top-4 right-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        <span>TUTUP</span>
+      </button>
+      
+      <div class="text-center border-2 border-black bg-white p-6 rounded-md shadow-[4px_4px_0px_0px_#000]">
+        <div class="inline-flex items-center gap-2 bg-[#FFDE59] border-2 border-black px-3 py-1 rounded-none font-mono text-xs font-extrabold mb-3">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+          <span>SERTIFIKAT PENCAPAIAN STEM ROBOTIKA</span>
+        </div>
+        <h2 class="font-display font-extrabold text-2xl lg:text-3xl">MAZEBOT EDUKIT ACADEMY</h2>
+        <p class="text-xs font-mono text-neutral-600 mt-1">Diberikan kepada Engineer Muda:</p>
+        
+        <input id="cert-student-name" type="text" placeholder="Ketik Nama Lengkapmu di Sini..." value="Tim Robotika MazeBot" class="mt-3 mb-3 w-full text-center font-display font-extrabold text-xl border-b-2 border-black bg-[#FAF7F2] py-1.5 focus:outline-none">
+        
+        <p class="text-sm">Telah menyelesaikan pembelajaran &amp; praktikum pada kurikulum:</p>
+        <div id="cert-course-name" class="font-display font-extrabold text-lg bg-[#7ED957] border-2 border-black inline-block px-4 py-1 rounded-none my-2 shadow-[2px_2px_0px_0px_#000]">
+          Tingkat SD (Kelas 4–6)
+        </div>
+        <div id="cert-stats" class="font-mono text-xs font-bold text-neutral-700 mt-2">
+          Progres: 0/16 Modul &bull; Total XP: 0 XP &bull; Streak: 7 Hari
+        </div>
+      </div>
+
+      <div class="flex justify-end gap-3 mt-5">
+        <button onclick="window.print()" class="nb-btn bg-[#7ED957] px-4 py-2 text-xs font-mono">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect width="12" height="8" x="6" y="14"/></svg>
+          <span>CETAK SERTIFIKAT</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="web/modules_data.js"></script>
+  <script src="web/app.js"></script>
+</body>
+</html>

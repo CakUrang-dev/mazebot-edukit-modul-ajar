@@ -1,0 +1,23 @@
+{
+  "name": "mazebot-edukit-portal",
+  "version": "2.6.0",
+  "description": "Platform Media Pembelajaran & Modul Ajar Robotika MazeBot EduKit (SD, SMP, SMA/SMK) — Neo-Brutalist Edition",
+  "main": "server.py",
+  "scripts": {
+    "start": "npx --yes serve -l ${PORT:-8080} .",
+    "serve:py": "python server.py",
+    "build:web": "python build_website.py",
+    "build:pdf": "python build_all_pdfs.py"
+  },
+  "keywords": [
+    "robotics",
+    "esp32",
+    "stem",
+    "curriculum",
+    "mazebot",
+    "arduino",
+    "neo-brutalist"
+  ],
+  "author": "CakUrang-dev",
+  "license": "MIT"
+}

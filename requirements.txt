@@ -1,0 +1,3 @@
+# Server utama (server.py) berjalan 100% menggunakan Python Standard Library (0 dependency).
+# Paket di bawah ini hanya diperlukan jika Anda ingin mengompilasi ulang file PDF dari skrip build_all_pdfs.py:
+playwright>=1.40.0
