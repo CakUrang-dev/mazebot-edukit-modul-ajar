@@ -45,8 +45,8 @@
     SD: {
       difficulty: "PEMULA • KELAS 4-6",
       headerBg: "#5CE1E6",
-      instructor: "Kak Bima, S.Pd.",
-      role: "Instruktur Robotika Dasar",
+      instructor: "",
+      role: "Kurikulum Robotika Dasar",
       avatarBg: "#FFDE59",
       totalHours: "32 JP (16 Modul)",
       priceTag: "GRATIS • EDUKIT",
@@ -56,8 +56,8 @@
     SMP: {
       difficulty: "MENENGAH • KELAS 8-9",
       headerBg: "#FFDE59",
-      instructor: "Pak Hendra, M.T.",
-      role: "Dosen Embedded & Fisika",
+      instructor: "",
+      role: "Kurikulum Embedded & Fisika",
       avatarBg: "#7ED957",
       totalHours: "32 JP (16 Modul)",
       priceTag: "GRATIS • EDUKIT",
@@ -67,8 +67,8 @@
     SMA: {
       difficulty: "LANJUTAN • KELAS 10-12",
       headerBg: "#7ED957",
-      instructor: "Dr. Aris CompSci",
-      role: "Lead Autonomous Algorithm",
+      instructor: "",
+      role: "Kurikulum Algoritma Navigasi",
       avatarBg: "#5CE1E6",
       totalHours: "32 JP (16 Modul)",
       priceTag: "GRATIS • EDUKIT",
@@ -279,12 +279,12 @@
           </div>
 
           <div class="p-4 pt-0">
-            <!-- Avatar Instruktur & Tombol Unduh Buku -->
+            <!-- Info Pengajar (Dikosongkan) & Tombol Unduh Buku -->
             <div class="flex items-center justify-between py-2 px-3 bg-[#FAF7F2] border-2 border-black rounded-md mb-3">
               <div class="flex items-center gap-2.5">
                 ${iconBox("User", 16, meta.avatarBg, "w-8 h-8")}
                 <div>
-                  <div class="font-display font-bold text-xs leading-none">${meta.instructor}</div>
+                  <div class="font-display font-bold text-xs leading-none">Pengajar: —</div>
                   <div class="font-mono text-[10px] text-neutral-600 mt-0.5">${meta.role}</div>
                 </div>
               </div>
@@ -603,7 +603,7 @@
               <p class="text-sm font-medium leading-relaxed">${mod.safety}</p>
             </div>
             <div class="mt-3 pt-2 border-t-2 border-black font-mono text-[11px] font-bold flex justify-between text-neutral-700">
-              <span>INSTRUKTUR: ${meta.instructor}</span>
+              <span>PENGAJAR: —</span>
               <span>KODE: ${lvlObj.id}-${mod.code}</span>
             </div>
           </div>
